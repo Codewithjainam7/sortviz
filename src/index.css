@@ -134,20 +134,20 @@ Dark space theme with neon accents for sci-fi diagnostic feel
   }
   
   .viz-bar.comparing {
-    @apply bg-yellow-400;
+    background: hsl(var(--viz-comparing));
     box-shadow: var(--glow-comparing);
     border-color: hsl(var(--viz-comparing));
   }
   
   .viz-bar.swapping {
-    @apply bg-red-500;
+    background: hsl(var(--viz-swapping));
     box-shadow: var(--glow-swapping);
     border-color: hsl(var(--viz-swapping));
     transform: scale(1.05);
   }
   
   .viz-bar.sorted {
-    @apply bg-green-500;
+    background: hsl(var(--viz-sorted));
     box-shadow: var(--glow-sorted);
     border-color: hsl(var(--viz-sorted));
   }
