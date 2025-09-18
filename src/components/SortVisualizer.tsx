@@ -50,8 +50,8 @@ const SortVisualizer: React.FC = () => {
     setStats({
       comparisons: 0,
       swaps: 0,
-      timeComplexity: algorithm === 'bubble' ? 'O(n²)' : 'O(n²)',
-      spaceComplexity: 'O(1)'
+      timeComplexity: getTimeComplexity(algorithm),
+      spaceComplexity: getSpaceComplexity(algorithm)
     });
   }, [arraySize, algorithm]);
 
@@ -59,6 +59,25 @@ const SortVisualizer: React.FC = () => {
   useEffect(() => {
     generateArray();
   }, [generateArray]);
+
+  const getTimeComplexity = (algo: string): string => {
+    switch (algo) {
+      case 'bubble': return 'O(n²)';
+      case 'selection': return 'O(n²)';
+      case 'insertion': return 'O(n²)';
+      case 'merge': return 'O(n log n)';
+      default: return 'O(n²)';
+    }
+  };
+
+  const getSpaceComplexity = (algo: string): string => {
+    switch (algo) {
+      case 'merge': return 'O(n)';
+      default: return 'O(1)';
+    }
+  };
+
+  const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
   // Bubble Sort Animation
   const bubbleSort = async () => {
@@ -113,11 +132,203 @@ const SortVisualizer: React.FC = () => {
     setIsPlaying(false);
   };
 
+  // Selection Sort Animation
+  const selectionSort = async () => {
+    const arr = [...array];
+    let comparisons = 0;
+    let swaps = 0;
+
+    for (let i = 0; i < arr.length - 1; i++) {
+      if (!isPlayingRef.current) return;
+      
+      let minIdx = i;
+      arr[i].state = 'sorted';
+
+      for (let j = i + 1; j < arr.length; j++) {
+        if (!isPlayingRef.current) return;
+
+        arr[j].state = 'comparing';
+        arr[minIdx].state = 'comparing';
+        comparisons++;
+
+        setArray([...arr]);
+        setStats(prev => ({ ...prev, comparisons }));
+        await sleep(101 - speed);
+
+        if (arr[j].value < arr[minIdx].value) {
+          if (minIdx !== i) arr[minIdx].state = 'default';
+          minIdx = j;
+        } else {
+          arr[j].state = 'default';
+        }
+      }
+
+      if (minIdx !== i) {
+        arr[i].state = 'swapping';
+        arr[minIdx].state = 'swapping';
+        setArray([...arr]);
+        await sleep(101 - speed);
+
+        [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]];
+        swaps++;
+        setStats(prev => ({ ...prev, swaps }));
+      }
+
+      arr[i].state = 'sorted';
+      if (minIdx !== i) arr[minIdx].state = 'default';
+      setArray([...arr]);
+    }
+
+    if (arr.length > 0) {
+      arr[arr.length - 1].state = 'sorted';
+      setArray([...arr]);
+    }
+    setIsPlaying(false);
+  };
+
+  // Insertion Sort Animation
+  const insertionSort = async () => {
+    const arr = [...array];
+    let comparisons = 0;
+    let swaps = 0;
+
+    arr[0].state = 'sorted';
+    setArray([...arr]);
+
+    for (let i = 1; i < arr.length; i++) {
+      if (!isPlayingRef.current) return;
+
+      let key = arr[i];
+      key.state = 'comparing';
+      let j = i - 1;
+
+      setArray([...arr]);
+      await sleep(101 - speed);
+
+      while (j >= 0 && arr[j].value > key.value) {
+        if (!isPlayingRef.current) return;
+
+        arr[j].state = 'comparing';
+        comparisons++;
+        setStats(prev => ({ ...prev, comparisons }));
+        setArray([...arr]);
+        await sleep(101 - speed);
+
+        arr[j + 1] = arr[j];
+        arr[j + 1].state = 'swapping';
+        swaps++;
+        setStats(prev => ({ ...prev, swaps }));
+        setArray([...arr]);
+        await sleep(101 - speed);
+
+        arr[j].state = 'default';
+        j--;
+      }
+
+      arr[j + 1] = key;
+      arr[j + 1].state = 'sorted';
+      
+      for (let k = 0; k <= i; k++) {
+        arr[k].state = 'sorted';
+      }
+      
+      setArray([...arr]);
+    }
+    setIsPlaying(false);
+  };
+
+  // Merge Sort Animation
+  const mergeSort = async () => {
+    const arr = [...array];
+    let comparisons = 0;
+    let swaps = 0;
+
+    const merge = async (left: number, mid: number, right: number) => {
+      if (!isPlayingRef.current) return;
+
+      const leftArr = arr.slice(left, mid + 1);
+      const rightArr = arr.slice(mid + 1, right + 1);
+      
+      let i = 0, j = 0, k = left;
+
+      while (i < leftArr.length && j < rightArr.length) {
+        if (!isPlayingRef.current) return;
+
+        arr[left + i].state = 'comparing';
+        arr[mid + 1 + j].state = 'comparing';
+        comparisons++;
+        setStats(prev => ({ ...prev, comparisons }));
+        setArray([...arr]);
+        await sleep(101 - speed);
+
+        if (leftArr[i].value <= rightArr[j].value) {
+          arr[k] = leftArr[i];
+          i++;
+        } else {
+          arr[k] = rightArr[j];
+          j++;
+        }
+        
+        arr[k].state = 'swapping';
+        swaps++;
+        setStats(prev => ({ ...prev, swaps }));
+        setArray([...arr]);
+        await sleep(101 - speed);
+        
+        arr[k].state = 'default';
+        k++;
+      }
+
+      while (i < leftArr.length) {
+        if (!isPlayingRef.current) return;
+        arr[k] = leftArr[i];
+        arr[k].state = 'swapping';
+        setArray([...arr]);
+        await sleep(101 - speed);
+        arr[k].state = 'default';
+        i++;
+        k++;
+      }
+
+      while (j < rightArr.length) {
+        if (!isPlayingRef.current) return;
+        arr[k] = rightArr[j];
+        arr[k].state = 'swapping';
+        setArray([...arr]);
+        await sleep(101 - speed);
+        arr[k].state = 'default';
+        j++;
+        k++;
+      }
+
+      for (let idx = left; idx <= right; idx++) {
+        arr[idx].state = 'sorted';
+      }
+      setArray([...arr]);
+    };
+
+    const mergeSortHelper = async (left: number, right: number) => {
+      if (!isPlayingRef.current || left >= right) return;
+
+      const mid = Math.floor((left + right) / 2);
+      await mergeSortHelper(left, mid);
+      await mergeSortHelper(mid + 1, right);
+      await merge(left, mid, right);
+    };
+
+    await mergeSortHelper(0, arr.length - 1);
+    setIsPlaying(false);
+  };
+
   const startSorting = () => {
     isPlayingRef.current = true;
     setIsPlaying(true);
-    if (algorithm === 'bubble') {
-      bubbleSort();
+    switch (algorithm) {
+      case 'bubble': bubbleSort(); break;
+      case 'selection': selectionSort(); break;
+      case 'insertion': insertionSort(); break;
+      case 'merge': mergeSort(); break;
+      default: bubbleSort();
     }
   };
 
@@ -164,8 +375,9 @@ const SortVisualizer: React.FC = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="bubble">Bubble Sort</SelectItem>
-                  <SelectItem value="selection" disabled>Selection Sort (Coming Soon)</SelectItem>
-                  <SelectItem value="insertion" disabled>Insertion Sort (Coming Soon)</SelectItem>
+                  <SelectItem value="selection">Selection Sort</SelectItem>
+                  <SelectItem value="insertion">Insertion Sort</SelectItem>
+                  <SelectItem value="merge">Merge Sort</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -267,11 +479,16 @@ const SortVisualizer: React.FC = () => {
           <div className="space-y-2">
             <h3 className="text-lg font-semibold text-primary flex items-center gap-2">
               <Zap className="w-5 h-5" />
-              Bubble Sort Algorithm
+              {algorithm === 'bubble' && 'Bubble Sort Algorithm'}
+              {algorithm === 'selection' && 'Selection Sort Algorithm'}
+              {algorithm === 'insertion' && 'Insertion Sort Algorithm'}
+              {algorithm === 'merge' && 'Merge Sort Algorithm'}
             </h3>
             <p className="text-muted-foreground">
-              Bubble Sort repeatedly steps through the list, compares adjacent elements and swaps them if they're in the wrong order. 
-              The pass through the list is repeated until the list is sorted. Watch as larger elements "bubble" to their correct positions!
+              {algorithm === 'bubble' && 'Bubble Sort repeatedly steps through the list, compares adjacent elements and swaps them if they\'re in the wrong order. Watch as larger elements "bubble" to their correct positions!'}
+              {algorithm === 'selection' && 'Selection Sort finds the minimum element and places it at the beginning, then repeats for the remaining unsorted portion. Watch as it builds the sorted array from left to right!'}
+              {algorithm === 'insertion' && 'Insertion Sort builds the sorted array one element at a time by inserting each element into its correct position. Watch as it maintains a sorted portion that grows with each iteration!'}
+              {algorithm === 'merge' && 'Merge Sort uses divide-and-conquer to recursively split the array, then merges sorted subarrays back together. Watch the powerful O(n log n) performance in action!'}
             </p>
           </div>
         </Card>
