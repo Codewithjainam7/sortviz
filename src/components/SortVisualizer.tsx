@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -30,6 +30,11 @@ const SortVisualizer: React.FC = () => {
     timeComplexity: 'O(n²)',
     spaceComplexity: 'O(1)'
   });
+
+  const isPlayingRef = useRef(isPlaying);
+  useEffect(() => {
+    isPlayingRef.current = isPlaying;
+  }, [isPlaying]);
 
   // Generate random array
   const generateArray = useCallback(() => {
@@ -63,7 +68,7 @@ const SortVisualizer: React.FC = () => {
     
     for (let i = 0; i < arr.length - 1; i++) {
       for (let j = 0; j < arr.length - i - 1; j++) {
-        if (!isPlaying) return;
+        if (!isPlayingRef.current) return;
         
         // Highlight comparing elements
         arr[j].state = 'comparing';
@@ -109,6 +114,7 @@ const SortVisualizer: React.FC = () => {
   };
 
   const startSorting = () => {
+    isPlayingRef.current = true;
     setIsPlaying(true);
     if (algorithm === 'bubble') {
       bubbleSort();
@@ -116,10 +122,12 @@ const SortVisualizer: React.FC = () => {
   };
 
   const stopSorting = () => {
+    isPlayingRef.current = false;
     setIsPlaying(false);
   };
 
   const resetArray = () => {
+    isPlayingRef.current = false;
     setIsPlaying(false);
     generateArray();
   };
