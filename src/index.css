@@ -8,56 +8,55 @@ Dark space theme with neon accents for sci-fi diagnostic feel
 
 @layer base {
   :root {
-    /* Sci-fi Dark Theme */
-    --background: 222 47% 7%;
-    --foreground: 180 100% 90%;
+    /* Ocean Deep Theme */
+    --background: 213 60% 8%;
+    --foreground: 187 65% 92%;
 
-    --card: 222 47% 9%;
-    --card-foreground: 180 100% 90%;
+    --card: 211 55% 12%;
+    --card-foreground: 187 65% 92%;
 
-    --popover: 222 47% 9%;
-    --popover-foreground: 180 100% 90%;
+    --popover: 211 55% 12%;
+    --popover-foreground: 187 65% 92%;
 
-    /* Neon Cyan Primary */
-    --primary: 180 100% 50%;
-    --primary-foreground: 222 47% 7%;
+    /* Teal Primary */
+    --primary: 186 56% 40%;
+    --primary-foreground: 213 60% 8%;
 
-    /* Dark Secondary */
-    --secondary: 222 47% 15%;
-    --secondary-foreground: 180 100% 90%;
+    --secondary: 209 50% 18%;
+    --secondary-foreground: 187 65% 92%;
 
-    --muted: 222 47% 12%;
-    --muted-foreground: 180 20% 70%;
+    --muted: 211 50% 15%;
+    --muted-foreground: 195 30% 70%;
 
-    --accent: 180 100% 50%;
-    --accent-foreground: 222 47% 7%;
+    --accent: 178 39% 55%;
+    --accent-foreground: 213 60% 8%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 180 100% 90%;
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 187 65% 92%;
 
-    --border: 222 47% 20%;
-    --input: 222 47% 15%;
-    --ring: 180 100% 50%;
+    --border: 209 45% 22%;
+    --input: 209 50% 18%;
+    --ring: 186 56% 40%;
 
     --radius: 0.75rem;
 
     /* SortViz Specific Colors */
-    --viz-comparing: 45 100% 60%;     /* Yellow for comparisons */
-    --viz-swapping: 0 100% 60%;       /* Red for swaps */
-    --viz-sorted: 120 100% 50%;       /* Green for sorted */
-    --viz-default: 222 47% 25%;       /* Default bar color */
-    --viz-background: 222 47% 7%;     /* Visualization background */
+    --viz-comparing: 45 100% 65%;     /* Warm gold for comparisons */
+    --viz-swapping: 14 90% 60%;       /* Coral for swaps */
+    --viz-sorted: 174 65% 50%;        /* Aqua green for sorted */
+    --viz-default: 209 50% 30%;       /* Default bar color */
+    --viz-background: 213 60% 8%;     /* Visualization background */
     
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(180 100% 50%), hsl(200 100% 60%));
-    --gradient-surface: linear-gradient(145deg, hsl(222 47% 9%), hsl(222 47% 12%));
-    --gradient-bar: linear-gradient(180deg, hsl(var(--viz-default)), hsl(222 47% 20%));
+    --gradient-primary: linear-gradient(135deg, hsl(213 65% 22%), hsl(186 56% 40%));
+    --gradient-surface: linear-gradient(145deg, hsl(211 55% 12%), hsl(209 50% 16%));
+    --gradient-bar: linear-gradient(180deg, hsl(178 39% 55%), hsl(209 50% 30%));
     
     /* Glowing Effects */
-    --glow-primary: 0 0 20px hsl(180 100% 50% / 0.3);
-    --glow-comparing: 0 0 15px hsl(45 100% 60% / 0.5);
-    --glow-swapping: 0 0 15px hsl(0 100% 60% / 0.5);
-    --glow-sorted: 0 0 15px hsl(120 100% 50% / 0.3);
+    --glow-primary: 0 0 20px hsl(186 56% 40% / 0.4);
+    --glow-comparing: 0 0 15px hsl(45 100% 65% / 0.5);
+    --glow-swapping: 0 0 15px hsl(14 90% 60% / 0.5);
+    --glow-sorted: 0 0 18px hsl(174 65% 50% / 0.45);
 
     --sidebar-background: 0 0% 98%;
 
